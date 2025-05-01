@@ -3,6 +3,7 @@ package net.friendlyfire.betterchat;
 import net.friendlyfire.betterchat.util.ChatDataStorage;
 import net.friendlyfire.betterchat.util.ChatHandler;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,12 +15,16 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+
+import java.io.File;
 
 @Mod(BetterChatMod.MODID)
-public class BetterChatMod
-{
+public class BetterChatMod {
+    public static ChatDataStorage chatDataStorage;
+    public static ChatHandler chatHandler;
     public static final String MODID = "betterchat";
     public BetterChatMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
@@ -34,18 +39,20 @@ public class BetterChatMod
     }
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        MinecraftServer server = event.getServer();
-        ChatDataStorage.init(server);
+        File worldDir = event.getServer().getWorldPath(LevelResource.ROOT).toFile();
+        chatDataStorage = new ChatDataStorage(worldDir);
+        chatHandler = new ChatHandler(chatDataStorage);
+    }
+    @SubscribeEvent
+    public void onServerStopped(ServerStoppedEvent event) {
+        chatDataStorage = null; // clear reference
     }
 
-    @SubscribeEvent
-    public void onServerStopping(ServerStoppingEvent event) {
-        ChatDataStorage.save();
-    }
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = BetterChatMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
         }
     }
+
 }

@@ -27,17 +27,12 @@ public class ModServerEvents {
     private static void playerJoined(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         UUID uuid = player.getUUID();
-        PlayerChatData data = ChatDataStorage.get(uuid);
-
+        PlayerChatData data = BetterChatMod.chatDataStorage.get(uuid);
         if (data.prefix != null && !data.prefix.isEmpty()) {
-            ChatHandler.setPrefix(uuid, data.prefix, player);
-        }
+            BetterChatMod.chatHandler.setPrefix(uuid, data.prefix, player);        }
         if (data.nickname != null && !data.nickname.isEmpty()) {
-            ChatHandler.setNickname(uuid, data.nickname, player);
-        }
-
+            BetterChatMod.chatHandler.setNickname(uuid, data.nickname, player);        }
         if (data.chatColor != null && !data.chatColor.isEmpty()) {
-            ChatHandler.setChatColor(uuid, data.chatColor);
-        }
+            BetterChatMod.chatHandler.setChatColor(uuid, data.chatColor);        }
     }
 }

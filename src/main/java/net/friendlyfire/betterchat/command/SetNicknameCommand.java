@@ -3,6 +3,7 @@ package net.friendlyfire.betterchat.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import net.friendlyfire.betterchat.BetterChatMod;
 import net.friendlyfire.betterchat.util.ChatHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -25,7 +26,7 @@ public class SetNicknameCommand {
         ServerPlayer player = context.getSource().getPlayer();
         String rawNickname = StringArgumentType.getString(context, "nickname");
         Component parsedNickname = ChatHandler.parseFormattedPrefix(rawNickname);
-        ChatHandler.setNickname(player.getUUID(), rawNickname, player);
+        BetterChatMod.chatHandler.setNickname(player.getUUID(), rawNickname, player);
         context.getSource().sendSuccess(
                 () -> Component.literal("Set your nickname to: ").append(parsedNickname),
                 false

@@ -13,47 +13,53 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ChatDataStorage {
+    private final Map<UUID, PlayerChatData> dataMap = new HashMap<>();
+    private final File dataFile;
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Type DATA_TYPE = new TypeToken<Map<UUID, PlayerChatData>>(){}.getType();
-    private static Map<UUID, PlayerChatData> dataMap = new HashMap<>();
-    private static File dataFile;
-
-    public static void init(MinecraftServer server) {
-        LevelResource worldRoot = LevelResource.ROOT;
-        File saveDir = server.getWorldPath(worldRoot).toFile(); // This gives us the world directory
-        File betterChatDir = new File(saveDir, "betterchat");
+    public ChatDataStorage(File worldDir) {
+        File betterChatDir = new File(worldDir, "betterchat");
         if (!betterChatDir.exists()) {
             betterChatDir.mkdirs();
         }
-        dataFile = new File(betterChatDir, "chat_data.json");
-        if (dataFile.exists()) {
-            try (FileReader reader = new FileReader(dataFile)) {
-                dataMap = GSON.fromJson(reader, DATA_TYPE);
-                if (dataMap == null) {
-                    dataMap = new HashMap<>();
+
+        this.dataFile = new File(betterChatDir, "chat_data.json");
+
+        if (this.dataFile.exists()) {
+            try (FileReader reader = new FileReader(this.dataFile)) {
+                Type type = new TypeToken<Map<UUID, PlayerChatData>>(){}.getType();
+                Map<UUID, PlayerChatData> loaded = new Gson().fromJson(reader, type);
+                if (loaded != null) {
+                    getDataMap().putAll(loaded);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    public static void save() {
+
+    public void save() {
         try (FileWriter writer = new FileWriter(dataFile)) {
-            GSON.toJson(dataMap, writer);
+            new GsonBuilder().setPrettyPrinting().create().toJson(getDataMap(), writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public static PlayerChatData get(UUID uuid) {
-        return dataMap.getOrDefault(uuid, new PlayerChatData("", "", ""));
+
+    public PlayerChatData get(UUID uuid) {
+        return getDataMap().getOrDefault(uuid, new PlayerChatData("", "", ""));
     }
-    public static void set(UUID uuid, PlayerChatData data) {
-        dataMap.put(uuid, data);
-        save();  // Save immediately after setting data
-    }
-    public static void remove(UUID uuid) {
-        dataMap.remove(uuid);
+
+    public void set(UUID uuid, PlayerChatData data) {
+        getDataMap().put(uuid, data);
         save();
     }
+
+    public void remove(UUID uuid) {
+        getDataMap().remove(uuid);
+        save();
+    }
+    public Map<UUID, PlayerChatData> getDataMap() {
+        return dataMap;
+    }
 }
+
