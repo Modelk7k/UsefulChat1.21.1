@@ -8,24 +8,20 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class ChatHandler {
     private final ChatDataStorage dataStorage;
-
     private final Map<UUID, Component> PREFIXES = new HashMap<>();
     private final Map<UUID, Component> NICKNAMES = new HashMap<>();
     private final Map<UUID, Component> COLORS = new HashMap<>();
-
     private static final int MAX_VISIBLE_LENGTH = 20;
 
     public ChatHandler(ChatDataStorage dataStorage) {
         this.dataStorage = dataStorage;
     }
-
     public void setPrefix(UUID uuid, String prefix, ServerPlayer player) {
         if (isTooLong(prefix, MAX_VISIBLE_LENGTH)) {
             player.sendSystemMessage(Component.literal("Prefix too long! Max 20 visible characters."));
@@ -38,7 +34,6 @@ public class ChatHandler {
         dataStorage.set(uuid, data);
         player.sendSystemMessage(Component.literal("Your prefix has been updated to: ").append(prefixComponent));
     }
-
     public  void setNickname(UUID uuid, String nickname, ServerPlayer player) {
         Component formattedNickname = parseFormattedPrefix(nickname);
         PlayerChatData data = dataStorage.get(uuid);
@@ -47,7 +42,6 @@ public class ChatHandler {
         NICKNAMES.put(uuid, formattedNickname);
         player.sendSystemMessage(Component.literal("Your nickname has been updated to: ").append(formattedNickname));
     }
-
     public void setChatColor(UUID uuid, String color) {
         Component colorComponent = parseFormattedPrefix(color);
         PlayerChatData data = dataStorage.get(uuid);
@@ -55,7 +49,6 @@ public class ChatHandler {
         dataStorage.set(uuid, data);
         COLORS.put(uuid, colorComponent);
     }
-
     @SubscribeEvent
     public static void onServerChat(ServerChatEvent event) {
         ServerPlayer player = event.getPlayer();
@@ -72,14 +65,12 @@ public class ChatHandler {
                 chatStyle = temp.getSiblings().get(0).getStyle();
             }
         }
-
         Component coloredMessage = Component.literal(message).setStyle(chatStyle);
         Component fullMessage = Component.empty()
                 .append(prefix)
                 .append(nickname)
                 .append(Component.literal(": ").withStyle(ChatFormatting.GRAY))
                 .append(coloredMessage);
-
         if (message.startsWith("!staff ")) {
             if (player.getTags().contains("staff")) {
                 String staffMsg = message.substring(7);
@@ -104,14 +95,12 @@ public class ChatHandler {
             event.setCanceled(true);
         }
     }
-
     public static Component parseFormattedPrefix(String rawPrefix) {
         MutableComponent result = Component.empty();
         StringBuilder buffer = new StringBuilder();
         boolean bold = false, italic = false, underlined = false, strikethrough = false, obfuscated = false;
         ChatFormatting color = null;
         Style currentStyle = Style.EMPTY;
-
         for (int i = 0; i < rawPrefix.length(); i++) {
             char c = rawPrefix.charAt(i);
             if (c == '&' && i + 1 < rawPrefix.length()) {
@@ -171,7 +160,6 @@ public class ChatHandler {
         }
         return result;
     }
-
     public static boolean isTooLong(String input, int maxLength) {
         int visibleCharCount = 0;
         for (int i = 0; i < input.length(); i++) {

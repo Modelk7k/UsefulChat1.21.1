@@ -17,7 +17,7 @@ public class SetPrefixCommand {
                 Commands.literal("prefix")
                         .requires(source -> {
                             ServerPlayer player = source.getPlayer();
-                            return player != null && player.getTags().contains("chat"); // Requires 'chat' tag
+                            return player != null && player.getTags().contains("chat");
                         })
                         .then(Commands.argument("prefix", StringArgumentType.greedyString())
                                 .executes(this::execute))
@@ -25,7 +25,7 @@ public class SetPrefixCommand {
     }
     private int execute(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
-        if (player == null) return 0; // Ensure that the player exists
+        if (player == null) return 0;
         String rawPrefix = StringArgumentType.getString(context, "prefix");
         if (!rawPrefix.startsWith("[")) rawPrefix = "&r[" + rawPrefix;
         if (!rawPrefix.endsWith("]")) rawPrefix = rawPrefix + "&r]";

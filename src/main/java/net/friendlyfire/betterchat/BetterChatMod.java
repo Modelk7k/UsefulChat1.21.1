@@ -2,7 +2,6 @@ package net.friendlyfire.betterchat;
 
 import net.friendlyfire.betterchat.util.ChatDataStorage;
 import net.friendlyfire.betterchat.util.ChatHandler;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -15,10 +14,8 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
-
 import java.io.File;
 
 @Mod(BetterChatMod.MODID)
@@ -45,9 +42,8 @@ public class BetterChatMod {
     }
     @SubscribeEvent
     public void onServerStopped(ServerStoppedEvent event) {
-        chatDataStorage = null; // clear reference
+        chatDataStorage = null;
     }
-
     @EventBusSubscriber(modid = BetterChatMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent

@@ -3,16 +3,12 @@ package net.friendlyfire.betterchat;
 import net.friendlyfire.betterchat.command.SetChatColorCommand;
 import net.friendlyfire.betterchat.command.SetNicknameCommand;
 import net.friendlyfire.betterchat.command.SetPrefixCommand;
-import net.friendlyfire.betterchat.util.ChatDataStorage;
-import net.friendlyfire.betterchat.util.ChatHandler;
 import net.friendlyfire.betterchat.util.PlayerChatData;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-
 import java.util.UUID;
 
 @EventBusSubscriber(modid = BetterChatMod.MODID, bus = EventBusSubscriber.Bus.GAME)
