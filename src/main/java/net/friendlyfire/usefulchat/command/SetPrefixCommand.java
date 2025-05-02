@@ -1,10 +1,10 @@
-package net.friendlyfire.betterchat.command;
+package net.friendlyfire.usefulchat.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.friendlyfire.betterchat.BetterChatMod;
-import net.friendlyfire.betterchat.util.ChatHandler;
+import net.friendlyfire.usefulchat.UsefulChat;
+import net.friendlyfire.usefulchat.util.ChatHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -29,7 +29,7 @@ public class SetPrefixCommand {
         String rawPrefix = StringArgumentType.getString(context, "prefix");
         if (!rawPrefix.startsWith("[")) rawPrefix = "&r[" + rawPrefix;
         if (!rawPrefix.endsWith("]")) rawPrefix = rawPrefix + "&r]";
-        BetterChatMod.chatHandler.setPrefix(player.getUUID(), rawPrefix, player);
+        UsefulChat.chatHandler.setPrefix(player.getUUID(), rawPrefix, player);
         Component parsedPrefix = ChatHandler.parseFormattedPrefix(rawPrefix);
         context.getSource().sendSuccess(
                 () -> Component.literal("Set your prefix to: ").append(parsedPrefix),

@@ -1,4 +1,4 @@
-package net.friendlyfire.betterchat.util;
+package net.friendlyfire.usefulchat.util;
 
 public class PlayerChatData {
     public String nickname;

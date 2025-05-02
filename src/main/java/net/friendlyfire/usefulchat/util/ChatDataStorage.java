@@ -1,4 +1,4 @@
-package net.friendlyfire.betterchat.util;
+package net.friendlyfire.usefulchat.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,7 +13,7 @@ public class ChatDataStorage {
     private final Map<UUID, PlayerChatData> dataMap = new HashMap<>();
     private final File dataFile;
     public ChatDataStorage(File worldDir) {
-        File betterChatDir = new File(worldDir, "betterchat");
+        File betterChatDir = new File(worldDir, "usefulchat");
         if (!betterChatDir.exists()) {
             betterChatDir.mkdirs();
         }

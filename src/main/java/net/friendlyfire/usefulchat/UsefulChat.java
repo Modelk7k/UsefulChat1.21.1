@@ -1,7 +1,7 @@
-package net.friendlyfire.betterchat;
+package net.friendlyfire.usefulchat;
 
-import net.friendlyfire.betterchat.util.ChatDataStorage;
-import net.friendlyfire.betterchat.util.ChatHandler;
+import net.friendlyfire.usefulchat.util.ChatDataStorage;
+import net.friendlyfire.usefulchat.util.ChatHandler;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -18,12 +18,12 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import java.io.File;
 
-@Mod(BetterChatMod.MODID)
-public class BetterChatMod {
+@Mod(UsefulChat.MOD_ID)
+public class UsefulChat {
     public static ChatDataStorage chatDataStorage;
     public static ChatHandler chatHandler;
-    public static final String MODID = "betterchat";
-    public BetterChatMod(IEventBus modEventBus, ModContainer modContainer) {
+    public static final String MOD_ID = "usefulchat";
+    public UsefulChat(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
@@ -44,7 +44,7 @@ public class BetterChatMod {
     public void onServerStopped(ServerStoppedEvent event) {
         chatDataStorage = null;
     }
-    @EventBusSubscriber(modid = BetterChatMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = UsefulChat.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {

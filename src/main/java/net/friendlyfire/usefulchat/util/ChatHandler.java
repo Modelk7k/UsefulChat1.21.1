@@ -1,6 +1,6 @@
-package net.friendlyfire.betterchat.util;
+package net.friendlyfire.usefulchat.util;
 
-import net.friendlyfire.betterchat.BetterChatMod;
+import net.friendlyfire.usefulchat.UsefulChat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -32,7 +32,6 @@ public class ChatHandler {
         PlayerChatData data = dataStorage.get(uuid);
         data.prefix = prefix;
         dataStorage.set(uuid, data);
-        player.sendSystemMessage(Component.literal("Your prefix has been updated to: ").append(prefixComponent));
     }
     public  void setNickname(UUID uuid, String nickname, ServerPlayer player) {
         Component formattedNickname = parseFormattedPrefix(nickname);
@@ -40,7 +39,6 @@ public class ChatHandler {
         data.nickname = nickname;
         dataStorage.set(uuid, data);
         NICKNAMES.put(uuid, formattedNickname);
-        player.sendSystemMessage(Component.literal("Your nickname has been updated to: ").append(formattedNickname));
     }
     public void setChatColor(UUID uuid, String color) {
         Component colorComponent = parseFormattedPrefix(color);
@@ -54,9 +52,9 @@ public class ChatHandler {
         ServerPlayer player = event.getPlayer();
         String message = event.getMessage().getString();
         UUID playerUUID = player.getUUID();
-        Component nickname = BetterChatMod.chatHandler.NICKNAMES.getOrDefault(playerUUID, player.getDisplayName());
-        Component prefix = BetterChatMod.chatHandler.PREFIXES.getOrDefault(playerUUID, Component.empty());
-        PlayerChatData data = BetterChatMod.chatHandler.dataStorage.get(playerUUID);
+        Component nickname = UsefulChat.chatHandler.NICKNAMES.getOrDefault(playerUUID, player.getDisplayName());
+        Component prefix = UsefulChat.chatHandler.PREFIXES.getOrDefault(playerUUID, Component.empty());
+        PlayerChatData data = UsefulChat.chatHandler.dataStorage.get(playerUUID);
 
         Style chatStyle = Style.EMPTY;
         if (data.chatColor != null && !data.chatColor.isEmpty()) {
